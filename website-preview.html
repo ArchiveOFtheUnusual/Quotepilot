@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bidoro — Landing Page PREVIEW (not live)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', sans-serif; background: #101B2E; color: #EEF2FA; }
+  .preview-banner { background: #E2574C; color: white; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; }
+  .logo { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.02em; }
+  .logo span { color: #F5B942; }
+  nav a { color: #8492AD; text-decoration: none; margin-left: 28px; font-size: 14px; }
+  .btn { display: inline-block; background: #F5B942; color: #101B2E; font-weight: 600; padding: 12px 26px; border-radius: 6px; text-decoration: none; font-size: 15px; }
+  .btn-outline { display: inline-block; border: 1px solid #3A4C6E; color: #EEF2FA; font-weight: 600; padding: 11px 25px; border-radius: 6px; text-decoration: none; font-size: 15px; }
+
+  .hero { padding: 70px 0 90px; text-align: center; }
+  .hero h1 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 52px; line-height: 1.05; margin: 0 0 20px; }
+  .hero h1 .accent { color: #F5B942; }
+  .hero p { color: #A9B4C9; font-size: 18px; max-width: 560px; margin: 0 auto 34px; line-height: 1.6; }
+
+  .mock-app { background: #17223A; border: 1px solid #283A57; border-radius: 12px; padding: 24px; max-width: 700px; margin: 50px auto 0; text-align: left; box-shadow: 0 30px 60px rgba(0,0,0,0.35); }
+  .mock-app .bar { display: flex; gap: 6px; margin-bottom: 16px; }
+  .mock-app .bar span { width: 10px; height: 10px; border-radius: 50%; background: #3A4C6E; }
+  .mock-row { display: flex; gap: 16px; }
+  .mock-col { flex: 1; }
+  .mock-label { font-size: 11px; color: #8492AD; margin-bottom: 6px; }
+  .mock-field { background: #101B2E; border: 1px solid #283A57; border-radius: 6px; height: 34px; margin-bottom: 14px; }
+  .mock-field.tall { height: 70px; }
+  .mock-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(245,185,66,0.14); color: #F5B942; font-size: 12px; padding: 5px 10px; border-radius: 999px; margin-bottom: 8px; }
+
+  section { padding: 64px 0; border-top: 1px solid #1D2A44; }
+  .section-title { font-family: 'Big Shoulders Display', sans-serif; font-size: 32px; font-weight: 700; text-align: center; margin: 0 0 40px; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step { background: #17223A; border: 1px solid #283A57; border-radius: 10px; padding: 24px; }
+  .step .num { width: 30px; height: 30px; border-radius: 50%; background: #F5B942; color: #101B2E; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; font-size: 14px; }
+  .step h3 { margin: 0 0 8px; font-size: 17px; }
+  .step p { margin: 0; color: #8492AD; font-size: 14px; line-height: 1.6; }
+
+  .pricing-box { max-width: 420px; margin: 0 auto; background: #17223A; border: 2px solid #F5B942; border-radius: 12px; padding: 40px; text-align: center; }
+  .price { font-family: 'Big Shoulders Display', sans-serif; font-size: 56px; font-weight: 700; margin: 10px 0; }
+  .price span { font-size: 20px; color: #8492AD; font-weight: 400; }
+  .pricing-box ul { list-style: none; padding: 0; margin: 24px 0; text-align: left; color: #C7CEDD; font-size: 14px; }
+  .pricing-box li { padding: 6px 0; }
+  .pricing-box li::before { content: "✓ "; color: #6FBF8B; font-weight: 700; }
+
+  .faq-item { border-bottom: 1px solid #1D2A44; padding: 18px 0; }
+  .faq-item h4 { margin: 0 0 8px; font-size: 15px; }
+  .faq-item p { margin: 0; color: #8492AD; font-size: 14px; line-height: 1.6; }
+
+  footer { text-align: center; padding: 40px 0; }
+  footer p { color: #566079; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">PREVIEW ONLY — this file is not hosted or live anywhere. Nothing here is public.</div>
+
+<div class="wrap">
+  <header>
+    <div class="logo">SCOPE<span>SNAP</span></div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="border-top: none;">
+    <h1>Turn a Messy Text Into a<br/>Professional Quote <span class="accent">in Under a Minute</span></h1>
+    <p>For plumbers, electricians, flooring, roofing, and HVAC contractors who are tired of typing up estimates by hand.</p>
+    <a href="#pricing" class="btn">Get Bidoro — $49</a>
+
+    <div class="mock-app">
+      <div class="bar"><span></span><span></span><span></span></div>
+      <div class="mock-chip">✦ Extract scope</div>
+      <div class="mock-row">
+        <div class="mock-col">
+          <div class="mock-label">Customer's request</div>
+          <div class="mock-field tall"></div>
+        </div>
+        <div class="mock-col">
+          <div class="mock-label">Scope of work</div>
+          <div class="mock-field"></div>
+          <div class="mock-field"></div>
+          <div class="mock-field"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <h2 class="section-title">How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Paste the request</h3>
+        <p>Drop in whatever the customer sent you — a text, an email, however messy.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>AI breaks it into scope</h3>
+        <p>A clean, editable list of tasks appears in seconds. Adjust anything that's off.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Price it and send</h3>
+        <p>Add materials, labor, and markup — download or email a professional estimate.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <h2 class="section-title">Pricing</h2>
+    <div class="pricing-box">
+      <div style="color:#8492AD; font-size:14px;">One time. No subscription.</div>
+      <div class="price">$49</div>
+      <ul>
+        <li>Unlimited quotes, forever</li>
+        <li>Runs on your own free AI account — $0 to operate</li>
+        <li>Works in any browser, no installation</li>
+        <li>Setup guide included</li>
+      </ul>
+      <a href="#" class="btn" style="width:100%;">Buy on Gumroad</a>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 class="section-title">FAQ</h2>
+    <div class="faq-item">
+      <h4>Is this really free to run?</h4>
+      <p>Yes — Bidoro uses your own free OpenRouter account for the AI feature. No subscription, no per-quote fee.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Do I need to install anything?</h4>
+      <p>No. It's a single file that opens directly in your browser.</p>
+    </div>
+    <div class="faq-item">
+      <h4>What if I'm not techy?</h4>
+      <p>The included setup guide walks through everything step by step, with screenshots.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>PREVIEW build — colors, copy, and layout are all easy to change before this goes live.</p>
+  </footer>
+</div>
+
+</body>
+</html>
