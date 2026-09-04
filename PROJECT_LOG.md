@@ -1,4 +1,4 @@
-# QuotePilot — Project Log
+# ScopeSnap — Project Log
 
 **What it is:** A tool for small-service contractors (plumbers, electricians, flooring, roofing, HVAC) that turns a customer's messy text request into a structured, priced quote — fast, with AI doing the scope extraction and the contractor reviewing/adjusting before anything goes out.
 
@@ -21,7 +21,7 @@
 
 **All 4 planned sections are now built.** Remaining work is testing (each section has been syntax-checked but not all been click-tested by the user) and any polish that surfaces from that.
 
-Current file: `quotepilot.jsx` (single React component artifact).
+Current file: `scopesnap-demo.jsx` (single React component artifact).
 
 ---
 
@@ -47,7 +47,7 @@ Current file: `quotepilot.jsx` (single React component artifact).
 
 ## Investigated and rejected as a base: ContractorKeith/contractor-bid
 
-Looked like a fit from its GitHub description, but on actual inspection it's a Python CLI tool for organizing large *commercial* construction bid documents (architectural plan sets, CSI divisions) — explicitly states it does not price jobs, has no UI, and requires real command-line/Python setup. Not usable as a base; retrofitting it would mean discarding ~90%+ of it anyway. **One idea salvaged from it:** per-trade "scope profiles" (different expected scope items per trade) — this is why QuotePilot has a Trade dropdown that feeds into the AI prompt, instead of one generic extraction prompt for every job type.
+Looked like a fit from its GitHub description, but on actual inspection it's a Python CLI tool for organizing large *commercial* construction bid documents (architectural plan sets, CSI divisions) — explicitly states it does not price jobs, has no UI, and requires real command-line/Python setup. Not usable as a base; retrofitting it would mean discarding ~90%+ of it anyway. **One idea salvaged from it:** per-trade "scope profiles" (different expected scope items per trade) — this is why ScopeSnap has a Trade dropdown that feeds into the AI prompt, instead of one generic extraction prompt for every job type.
 
 ## Ideas considered but shelved (for context if priorities change)
 
@@ -68,4 +68,4 @@ The `fetch('https://api.anthropic.com/v1/messages', ...)` call inside `extractSc
 
 ## How to pick this up in a new session
 
-Give Claude this repo's URL — it can clone/read this log plus `quotepilot.jsx` directly and skip re-explaining any of the above.
+Give Claude this repo's URL — it can clone/read this log plus `scopesnap-demo.jsx` directly and skip re-explaining any of the above.
