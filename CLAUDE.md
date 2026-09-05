@@ -1,101 +1,63 @@
-# Bidoro — Agent Context
+# Bidoro Business — Handoff / Agent Context
 
-Read this whole file before making any changes. It consolidates everything from `PROJECT_LOG.md`, `BUSINESS_PLAN.md`, `MASTER_PLAN.md`, and `NAMING_STRATEGY.md` into one current reference. Those files still exist for historical detail, but this one is the source of truth for current state.
-
----
-
-## ✅ Rename to Bidoro: complete
-
-The product name is locked as "Bidoro," and the full rename has been done and verified — this is no longer a pending task. What changed:
-
-1. `scopesnap.html` → `bidoro.html`: page title, `<h1>` header, the `Bidoro()` component name, the render call, mailto body text, Settings-screen copy, and the `localStorage` keys (`bidoro-quotes`, `bidoro-business`, `bidoro-settings` — note these are new keys, so any old test data saved under the previous `quotepilot-*` keys won't carry over, which is fine since nothing has shipped to a real customer).
-2. `scopesnap-demo.jsx` → `bidoro-demo.jsx`: same text changes. **The protected Claude.ai API call (model `claude-sonnet-4-6`, no extra headers) was explicitly verified untouched** — see the warning below, which still applies.
-3. All three PDFs regenerated under `bidoro-` filenames with "BIDORO" branding, each re-rendered and visually checked page-by-page after rebuilding (not just assumed correct from the text swap).
-4. `logo.png` regenerated with a "BIDORO" wordmark. One real bug was caught and fixed during this: an initial two-color split of the logo text (using an SVG `tspan` with `text-anchor="middle"`) caused overlapping letters between "BID" and "ORO" — fixed by rendering the wordmark as a single solid color instead of guessing at manual offsets.
-5. All planning docs (`PROJECT_LOG.md`, `BUSINESS_PLAN.md`, `MASTER_PLAN.md`, `PAPERWORK_KIT_LISTING.md`, `website-preview.html`) updated to reference Bidoro and the new filenames throughout.
-6. `NAMING_STRATEGY.md` was deliberately **not** rebranded — it's a historical record of the naming decision process and should keep referring to "ScopeSnap" (and the other rejected candidates) as what they were at the time.
-
-Everything above was verified the same way the rest of this project has been: JSX syntax-checked after every text change, PDFs re-rendered to images and visually inspected (catching a couple of real bugs along the way, not just assumed correct), and the protected API call explicitly grepped-for to confirm it wasn't touched.
+Read this whole file first. This supersedes the version of CLAUDE.md that was in the repo before — a lot has happened since (Gumroad went live, a full product-idea pipeline was built and tightened through several rounds, and three new products were built end-to-end). Deep historical detail still lives in `PROJECT_LOG.md`, `BUSINESS_PLAN.md`, `MASTER_PLAN.md`, `NAMING_STRATEGY.md`, and `TASKS.md` — this file is the current-state summary that ties everything together.
 
 ---
 
-## Naming history (why we're on attempt #3)
+## 1. Bidoro — status: LIVE
 
-1. **QuotePilot** — original name. Dropped for leaning on the overused "-pilot" AI-naming pattern.
-2. **ScopeSnap** — second name, built around the blueprint/chalk-line visual brand. Dropped after verification found two live, direct competitors already using it: `scopesnap.app` (a contractor billing/invoicing app) and `scopesnap.io` (an AI notes-to-scope tool). Confusingly close on both counts.
-3. **Bidoro** — current, locked name. Verified clean: no software, SaaS, or contractor-tool use found anywhere. Only existing uses are unrelated — a traditional Japanese glassware craft term (Tsugaru Bidoro), an African marketplace app, and a small manufacturing-parts company. None in our category.
+Bidoro (formerly QuotePilot, then ScopeSnap — see `NAMING_STRATEGY.md` for why each name changed) is **published and live on Gumroad.** $49 one-time. AI quote-scoping tool for contractors, runs on the buyer's own free OpenRouter/Groq/NVIDIA-NIM key — genuinely $0 to operate for both seller and buyer.
 
-Six other candidates (ChalkLine, Bidwright, Trady, Estimio, Quovex, Trebix) were checked and rejected — all collided with real, active competitors or companies. Full detail in `NAMING_STRATEGY.md` if useful, but the outcome above is what matters going forward.
-
----
-
-## What the product actually is
-
-An AI tool for small-service contractors (plumbers, electricians, flooring, roofing, HVAC) that turns a customer's messy text/email request into a structured, priced, professional estimate — in about a minute instead of typing one up from scratch.
-
-**Two versions exist, for different purposes:**
-- **`bidoro.html`** (rename pending, currently `scopesnap.html`) — the real, sellable, standalone product. Runs entirely client-side: no server, no account with us. Storage via `localStorage`. AI scope-extraction calls OpenRouter directly using the buyer's own free API key (see Settings screen in-app). This is what gets sold on Gumroad.
-- **`bidoro-demo.jsx`** (rename pending, currently `scopesnap-demo.jsx`) — a Claude.ai-artifact-only demo version, used for live in-chat demonstrations. **Do not confuse the two or merge their architectures.**
-
-**All 4 build sections are complete and tested:**
-1. Intake form + AI scope extraction
-2. Pricing calculator (materials, labor, markup → total)
-3. PDF-quality preview + download (browser print-to-PDF approach, since no PDF library is available in the Claude-artifact build environment) + email-to-customer via `mailto:`
-4. Status tracking (Draft/Sent/Accepted/Declined) with automatic "follow up" flagging after 3+ days sitting at Sent
+- Full rebrand complete and verified (all files, all references, byte-for-byte confirmed in the repo)
+- Gumroad listing published: category set, tags filled, Discover enabled, Commercial license selected, structured attributes (JavaScript/React/source-code-included) filled in
+- Business email: `bidoro.contact@gmail.com`
+- Companion product `bidoro-paperwork-kit.pdf` ($12, fillable estimate/invoice/change-order templates) built and listing-ready, not yet confirmed published
+- The bigger "Bidoro Jobs" desktop-app concept (full estimate→job→change-order lifecycle, no AI) is deliberately **deferred** until Bidoro has real revenue traction — see `MASTER_PLAN.md`. Do not start building it without the user explicitly re-confirming.
 
 ---
 
-## ⚠️ Critical: do not "fix" the AI call in the Claude.ai demo file
+## 2. The product-idea pipeline (Hermes + Cowork) — how it works today
 
-Inside `bidoro-demo.jsx` (the Claude.ai-only version), the `fetch('https://api.anthropic.com/v1/messages', ...)` call is intentional and only works inside a real Claude.ai artifact — the platform proxies it and handles auth automatically, but only when the request matches the original shape exactly: `model: 'claude-sonnet-4-6'`, no `anthropic-version` or `x-api-key` headers. A general-purpose coding agent will very reasonably flag this as broken (no auth header, unfamiliar model string) and try to "fix" it by adding a header and swapping the model — this happened once already with Claude Code. That fix will look correct against a mock test but breaks the real feature. **Do not change the model string or add API headers to that specific fetch call.** This warning does not apply to `bidoro.html` (the standalone version), which correctly uses OpenRouter with a real user-supplied key.
+Two AI agents (Hermes Agent, running on Groq or NVIDIA NIM; Claude Cowork, running on the user's Pro plan) independently research and draft new digital-product concepts, feeding into one shared approval workflow. **The current, complete instructions for both are in `PASTE_THIS_INTO_HERMES_FIRST.txt`** — that single file is the authoritative ruleset; paste its full contents into any fresh Hermes or Cowork session.
 
----
+**The workflow:**
+1. **Gathering** (fires on its own — schedule or manual start): researches real niches via actual web search, produces **multiple** concepts per run (typically 2-3), each internally self-argued-against before being saved. Each concept lands as `PRODUCT_CONCEPT_YYYY-MM-DD_HHMM.md` in its own niche subfolder, `STATUS: PENDING APPROVAL`.
+2. **Human review** — concepts get pasted into a Claude chat (this one, or a fresh one) for a second opinion before deciding.
+3. **Approve or reject:**
+   - `approve <niche>/<filename>` → triggers the **Checker** (an independent re-verification pass) → if it passes cleanly, copied into `approved/<niche>-<name>/CONCEPT.md`, ready for a coding agent to build
+   - `reject <niche>/<filename>` → marked `STATUS: REJECTED`, filed into `rejected/<niche>-<name>/` so the decision is on record
+4. **Build** — `CODING_AGENT_BRIEF.txt` scopes a coding agent (Claude Code recommended) to only ever build what's sitting in `approved/`, never invent its own ideas.
 
-## Brand identity
-
-- **Visual direction:** "Blueprint & chalk line" — evokes plan sheets and snapped chalk lines, deliberately avoiding both generic SaaS-dashboard look and (after an earlier miss) anything resembling UPS's brown/gold branding.
-- **Colors:** background `#101B2E`, surface `#17223A`, border `#283A57`, text primary `#EEF2FA`, text secondary `#8492AD`, accent (chalk-line yellow) `#F5B942`, success `#6FBF8B`, danger `#E2574C`.
-- **Typography:** "Big Shoulders Display" for headlines (industrial/work-order-ticket signage feel), "Inter" for body/UI text.
-- **Positioning line:** *"The $49 quoting tool for solo contractors who don't need — or want to pay monthly for — a whole business platform."*
-
----
-
-## Business model (verified, not estimated)
-
-- **Price:** $49 one-time (not subscription) — deliberate contrast with every competitor found, all of which are monthly subscriptions.
-- **Sold on:** Gumroad. Fee structure verified: 10% platform fee + 2.9% + $0.30 processing ≈ 13.2% effective, netting **~$42.38 per $49 sale**.
-- **Payout:** Direct deposit/ACH to a US bank account (not PayPal — PayPal adds extra fees that only make sense for sellers without US banking access). Weekly payouts every Friday, $10 minimum balance, 7-day hold on new-seller sales.
-- **Companion product:** `bidoro-paperwork-kit.pdf` (rename pending) — a $12 fillable Estimate/Invoice/Change-Order/Checklist bundle, sold separately as a lower-friction product and upsell funnel into the main app. Listing copy in `PAPERWORK_KIT_LISTING.md`.
-- **Business email:** a dedicated Gmail address (not personal) recommended for the Gumroad account and customer contact; Zoho Mail recommended as the free custom-domain upgrade once a landing page domain exists.
+**Current ruleset baked into the pipeline** (all learned the hard way, from real bad outputs — worth knowing why each exists so nobody "fixes" them back out):
+- **Product type must be real software**, not static asset bundles (design templates, LUT packs, font packs). Two early concepts (an Affinity Designer template kit, a Premiere Pro LUT bundle) got build-ready-looking treatment despite being things a coding agent literally can't build — that's what this rule closed.
+- **No uncited numbers.** Any specific-sounding statistic ("demand density of 22," "difficulty 28/100") needs a named, linkable source or it can't be stated at all. Two concepts slipped in fabricated-looking precise stats with zero source — this looked *more* credible than an obviously-unsupported claim, which is why it's treated as a hard rule now, not a style note.
+- **Must be $0 to build AND $0 to run.** A mockup-generator concept (MockuGenie) quietly switched to $39/month pricing — the tell that its core feature (AI image generation) has no sustainable free tier the way text-AI does. Every product in this pipeline is one-time-priced by design; a concept proposing a subscription is a red flag to investigate, not a pricing choice to accept.
+- **Pricing rule:** default $29+. Only $5-10 if ALL three are true: (1) no existing product solves this even partially, (2) value obvious in one sentence, (3) market is broad, not a narrow sub-group. **Important nuance:** "no competition" only gates the $5-10 exception — it does NOT mean a niche with any existing competitor should be discarded entirely. Early runs over-applied this and kept finding zero viable niches; the fix was making explicit that competition existing is normal, and the real bar is a specific differentiation angle (the way Wispring/Braidal/EncoreEarn/Chalkside all found one despite adjacent competitors existing).
+- **Research should target software-specific sources** (Gumroad's own tools categories, Product Hunt, Indie Hackers) rather than generic "digital product trends," which mostly surfaces Etsy's crafts/printables ecosystem and pulls concepts toward the asset-bundle shape this pipeline explicitly avoids.
+- Every concept requires: name-availability check (real search, this run), alternatives considered, and an honest caveats section — a concept missing any of these is incomplete, not just imperfect.
 
 ---
 
-## Verified competitive landscape
+## 3. Three new products — built, verified, not yet published
 
-| Competitor | Model | Price | Notes |
-|---|---|---|---|
-| Tradify | Subscription/user | $47–61/mo | Full job-management suite (quoting, invoicing, scheduling, timesheets). NZ, since 2013, ~20,000 customers, acquired by Access Group 2024. AI features gated to top tier. |
-| Bidwright | Subscription/self-hosted | Varies | AI construction estimating for larger/commercial takeoffs (2D/3D/BIM) — different segment than us. |
-| Estimio | Subscription (trial) | Undisclosed | Closest direct functional competitor — AI job-description-to-estimate, mobile-first. |
-| B2W Software | Enterprise | Undisclosed | Heavy/civil construction estimating since 1993 — different segment. |
-| Chalkline, Inc. | Enterprise | Undisclosed | BIM/spec document management — different function entirely. |
+Built end-to-end from Cowork's most recent (and best-quality) batch of concepts. All three are genuinely lower-risk than Bidoro: **zero AI dependency** — rule-based matchers/mergers, no API key setup for buyers at all.
 
-**Our four verified differentiators:**
-1. Only one with a genuine one-time price (competitors are all subscriptions, several costing more per month than our full price).
-2. Only one where the AI itself costs nothing to anyone, ever — runs on the buyer's own free OpenRouter key, not our infrastructure.
-3. Only one with no account and no platform lock-in — a single file the buyer owns outright.
-4. Deliberately narrow — one job done well, not a full business-management platform like Tradify/Bidwright.
+- **Braidal** ($29) — merges two wedding traditions (10 built-in options) into one coordinated checklist/timeline/budget.
+- **EncoreEarn** ($29) — matches retirees/near-retirees to realistic supplemental income options by background, free hours, and Social Security status.
+- **Chalkside** ($29) — matches teachers to realistic side-income options by certification, free hours, and summer availability, with a projected monthly total.
+
+Each was actually functionally tested (real DOM execution of the matching/merging logic, not just visual inspection) before delivery — one real bug (a clipped logo) was caught and fixed in this process. Delivered as `three-new-products.zip`, each in its own folder with the app file, a logo, and a complete Gumroad listing draft (`GUMROAD_LISTING.md`). **Not yet published** — that's the next human action needed.
 
 ---
 
-## Current status (as of naming lock)
+## 4. What's actually pending right now
 
-**Done:** full 4-section app (both versions), setup guide, quick-start guide, paperwork kit, listing copy for both products, business plan, master plan/roadmap, naming research, Gumroad payment setup explained, business email guidance, website preview (HTML file, **not deployed** — explicit hold until approval), GitHub repo set up and verified in sync.
+- [ ] Publish Braidal, EncoreEarn, and Chalkside to Gumroad (listing copy is ready, just needs uploading)
+- [ ] Publish the Bidoro paperwork kit as its own $12 listing
+- [ ] Re-run Cowork (and/or Hermes) for another batch of 2-3 concepts, using the current `PASTE_THIS_INTO_HERMES_FIRST.txt` — the ruleset has been substantially tightened since earlier runs, and the Braidal/EncoreEarn/Chalkside batch is the proof it's working well now
+- [ ] Continue the standing rule for all sales: every channel defaults to self-serve purchase; a phone call is only a last-resort close for outbound leads, never the default
 
-**Not started / explicitly on hold:**
-- The rename described at the top of this file (highest priority next step)
-- Actually deploying the website (preview-only until explicit go-ahead)
-- NJ contractor license-board scraper + email/website enrichment agent (sketched only, Phase 3 in `MASTER_PLAN.md` — deliberately sequenced *after* the Gumroad listing goes live, since outbound leads need somewhere to be sent)
-- Gumroad listing itself is mid-setup on the human side
-
-**Standing rule for any agent working on this project:** every sales channel defaults to a self-serve purchase (Gumroad or a link sent by email). A phone call is only used as a last-resort close for an outbound lead that doesn't convert on its own — never the default path.
+## Standing rules that apply to everything above
+- Every sales channel defaults to self-serve purchase (Gumroad or a link sent by email) — a call is last-resort only.
+- Nothing gets published/listed without the human reviewing it first — the approval pipeline exists specifically so quality gets checked before publishing, not after.
+- Keep this file updated as the single current-state summary — don't let detail sprawl back across many separate docs that need to be pieced together to understand where things stand.
